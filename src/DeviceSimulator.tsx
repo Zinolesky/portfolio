@@ -12,6 +12,7 @@ import {
   Mail,
   MapPin,
   Maximize2,
+  Monitor,
   Play,
   RotateCw,
   Shield,
@@ -39,6 +40,8 @@ function AppIconGlyph({ iconKey, className = 'w-6 h-6' }: { iconKey?: Project['i
       return <Video className={className} />;
     case 'pitch':
       return <LayoutGrid className={className} />;
+    case 'pos':
+      return <Monitor className={className} />;
     default:
       return <Smartphone className={className} />;
   }
