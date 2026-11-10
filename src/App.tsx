@@ -212,13 +212,15 @@ export default function App() {
                       className="h-full w-full object-contain cursor-pointer"
                     />
                     <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => handleLoadInPhone(p.id)}
-                        className="inline-flex items-center gap-1 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 px-2.5 py-1 text-xs font-medium text-white shadow cursor-pointer"
-                      >
-                        <Smartphone className="w-3 h-3" /> In Phone
-                      </button>
+                      {p.categories.includes('Mobile') && (
+                        <button
+                          type="button"
+                          onClick={() => handleLoadInPhone(p.id)}
+                          className="inline-flex items-center gap-1 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 px-2.5 py-1 text-xs font-medium text-white shadow cursor-pointer"
+                        >
+                          <Smartphone className="w-3 h-3" /> In Phone
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => setActiveVideo(p)}
