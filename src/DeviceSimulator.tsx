@@ -140,7 +140,7 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
             className={`relative bg-slate-950 p-2.5 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.35)] border-[3px] border-slate-700/90 ring-1 ring-white/10 transition-all duration-300 ${
               isLandscape
                 ? 'w-full max-w-[540px] rounded-[34px]'
-                : 'w-[282px] sm:w-[300px] h-[590px] rounded-[44px]'
+                : 'w-[282px] sm:w-[292px] h-[615px] rounded-[44px]'
             }`}
           >
             {/* Hardware Side Buttons (Portrait) */}
@@ -159,7 +159,7 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
               }`}
             >
               {/* Android Status Bar */}
-              <div className="flex items-center justify-between px-5 pt-2.5 pb-1.5 text-[11px] font-medium text-slate-300 bg-slate-950/90 z-10 shrink-0">
+              <div className="relative z-20 flex items-center justify-between px-5 pt-2.5 pb-1.5 text-[11px] font-medium text-slate-300 bg-slate-950 shrink-0">
                 <span className="font-mono">{lagosTime.time}</span>
                 {!isLandscape && (
                   <div className="w-3 h-3 rounded-full bg-black border border-slate-800" />
@@ -184,7 +184,7 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
                     className={
                       isLandscape
                         ? 'w-full aspect-video object-contain bg-black'
-                        : 'w-full h-full object-contain bg-black'
+                        : 'absolute inset-x-0 -top-[4.4%] w-full h-[111.5%] object-fill bg-black'
                     }
                   />
                 </div>
@@ -292,7 +292,7 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
               )}
 
               {/* Android System Navigation Bar */}
-              <div className="flex items-center justify-around py-2 px-6 bg-slate-950 border-t border-slate-800/80 text-slate-400 shrink-0">
+              <div className="relative z-20 flex items-center justify-around py-2 px-6 bg-slate-950 border-t border-slate-800/80 text-slate-400 shrink-0">
                 <button
                   type="button"
                   onClick={() => onSelectApp(null)}
