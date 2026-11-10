@@ -29,7 +29,7 @@ const actionLink =
   'inline-flex items-center gap-1.5 text-xs font-medium text-indigo-300 hover:text-white transition-colors';
 
 export default function App() {
-  const mobileApps = useMemo(() => projects.filter((p) => Boolean(p.video)), []);
+  const mobileApps = useMemo(() => projects.filter((p) => Boolean(p.video) && p.categories.includes('Mobile')), []);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(mobileApps[0]?.id ?? null);
   const [activeFilter, setActiveFilter] = useState<'All' | ProjectCategory>('All');
   const [activeVideo, setActiveVideo] = useState<Project | null>(null);

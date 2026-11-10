@@ -14,7 +14,7 @@ export interface Project {
   video?: string;
   orientation?: "portrait" | "landscape";
   iconGradient?: string;
-  iconKey?: "shield" | "map" | "video" | "pitch" | "pos";
+  iconKey?: "shield" | "map" | "video" | "pitch";
 }
 
 export const profile = {
@@ -92,9 +92,6 @@ export const projects: Project[] = [
     ],
     repo: "https://github.com/Zinolesky/pos-system",
     video: "/videos/prime-pos.mp4",
-    orientation: "landscape",
-    iconGradient: "from-cyan-500 to-blue-700",
-    iconKey: "pos",
   },
   {
     id: "antispam",
