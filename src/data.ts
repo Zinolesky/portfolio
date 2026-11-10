@@ -67,7 +67,7 @@ export const experience = [
     company: "Pufferfish Technology Limited",
     location: "Lekki, Lagos State",
     role: "Industrial Training Intern, HR & Administration",
-    period: "August 2024",
+    period: "July - September 2024",
     points: [
       "Engineered structured spreadsheet workflows with automated validation rules across 100+ master employee datasets.",
       "Reduced cross-departmental record request turnaround time by 25% by automating document tracking and reporting pipelines.",
