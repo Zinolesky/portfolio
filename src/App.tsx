@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
+  Award,
   Briefcase,
   Download,
   ExternalLink,
@@ -13,6 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import {
+  certification,
   education,
   experience,
   profile,
@@ -24,6 +26,7 @@ import {
 import { DeviceSimulator } from './DeviceSimulator';
 
 const FILTERS: Array<'All' | ProjectCategory> = ['All', 'Mobile', 'Backend & APIs', 'Web & Desktop'];
+const CURRENT_YEAR = new Date().getFullYear();
 
 const actionLink =
   'inline-flex items-center gap-1.5 text-xs font-medium text-indigo-300 hover:text-white transition-colors';
@@ -357,7 +360,7 @@ export default function App() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
+          <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-4">
                 <GraduationCap className="w-4 h-4" />
@@ -384,6 +387,31 @@ export default function App() {
                 </div>
               </div>
             </div>
+
+            <div className="pt-5 border-t border-slate-800/80">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-3">
+                <Award className="w-4 h-4" />
+                <span>Certification</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <h3 className="text-sm font-semibold text-white">
+                  {certification.issuer} — {certification.title}
+                </h3>
+                <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
+                  {certification.credential}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 mt-2.5">
+                {certification.topics.map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -392,7 +420,7 @@ export default function App() {
       <footer className="mt-auto border-t border-slate-800/80 py-8">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <span>
-            © {new Date().getFullYear()} {profile.name} · {profile.location}
+            © {CURRENT_YEAR} {profile.name} · {profile.location}
           </span>
           <div className="flex items-center gap-5">
             <a href={profile.github} target="_blank" rel="noreferrer" className="hover:text-slate-300">

@@ -58,8 +58,16 @@ export const education = {
     "System Architecture",
     "Operating Systems",
     "Compiler Design",
+    "Object-Oriented Programming",
     "Artificial Intelligence",
   ],
+};
+
+export const certification = {
+  issuer: "New Horizons Nigeria",
+  title: "Certificate of Completion",
+  credential: "Credential: NHN 148044",
+  topics: ["Machine Learning", "Python Programming", "Web Frontend", "Web Backend"],
 };
 
 export const experience = [
@@ -95,7 +103,7 @@ export const projects: Project[] = [
   },
   {
     id: "antispam",
-    title: "Distributed Anti-Spam Call Screening App",
+    title: "HushLine — Distributed Anti-Spam Call Screening App",
     shortName: "HushLine",
     date: "October 2026",
     categories: ["Mobile", "Backend & APIs"],
@@ -106,6 +114,7 @@ export const projects: Project[] = [
       "Native Android call-screening modules in Kotlin bridged to a React Native frontend to intercept and evaluate caller metadata in real time.",
       "Sub-millisecond local caller reputation lookups on-device using JSI SQLite for high-speed offline querying.",
     ],
+    repo: "https://github.com/Zinolesky/antispam",
     live: "https://antispam-docs.vercel.app",
     video: "/videos/hushline.mp4",
     orientation: "portrait",
@@ -137,7 +146,7 @@ export const projects: Project[] = [
     shortName: "ChatFlow",
     date: "October 2026",
     categories: ["Mobile"],
-    stack: ["React Native", "Antigravity 2.0"],
+    stack: ["React Native", "TypeScript", "Go", "Supabase (PostgreSQL)"],
     flow: ["Home Feed", "DM Video Playlists", "Hybrid Reel Engine", "Discovery Feed"],
     points: [
       "Mobile video-sharing application featuring a hybrid Reel-style playback engine built in React Native.",
@@ -195,7 +204,7 @@ export const projects: Project[] = [
   {
     id: "nero-stream",
     title: "Nero Stream",
-    date: "",
+    date: "October 2026",
     categories: ["Web & Desktop"],
     stack: ["JavaScript", "Vercel"],
     points: ["Custom movie streaming web application with video embed aggregation and responsive playback UI."],
@@ -205,7 +214,7 @@ export const projects: Project[] = [
   {
     id: "prime-legacy",
     title: "Prime Legacy Power Website",
-    date: "",
+    date: "July 2026",
     categories: ["Web & Desktop"],
     stack: ["Astro", "Vercel"],
     points: ["Fast static business website built with Astro and deployed on Vercel."],
