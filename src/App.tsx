@@ -143,8 +143,8 @@ function PortfolioContent() {
             </span>
           </a>
 
-          {/* Section Navigation Tabs with Dynamic Active Highlight */}
-          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs font-medium backdrop-blur-md">
+          {/* Section Navigation with Dynamic Active Underline Indicator */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-medium">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -152,16 +152,20 @@ function PortfolioContent() {
                   key={item.id}
                   href={`#${item.id}`}
                   onClick={() => setActiveSection(item.id)}
-                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1.5 ${
+                  className={`relative py-1.5 transition-colors duration-200 ${
                     isActive
-                      ? 'text-white font-semibold bg-indigo-600 shadow-md shadow-indigo-600/35 border border-indigo-400/30'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                      ? 'text-white font-semibold'
+                      : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.9)] animate-pulse" />
-                  )}
-                  {item.label}
+                  <span>{item.label}</span>
+                  <span
+                    className={`absolute -bottom-0.5 left-0 right-0 h-[2px] rounded-full transition-all duration-200 ${
+                      isActive
+                        ? 'bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.7)] opacity-100 scale-x-100'
+                        : 'opacity-0 scale-x-0 bg-transparent'
+                    }`}
+                  />
                 </a>
               );
             })}
