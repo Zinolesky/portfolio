@@ -123,12 +123,12 @@ function PortfolioContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-x-clip">
       {/* Multi-layer Ambient Parallax Background */}
       <ParallaxBackground />
 
-      {/* Sticky Top Navbar */}
-      <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#060913]/85 backdrop-blur-xl">
+      {/* Fixed Top Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-40 border-b border-slate-800/80 bg-[#060913]/90 backdrop-blur-xl shadow-lg shadow-black/25">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between gap-4">
           <a
             href="#"
@@ -177,6 +177,9 @@ function PortfolioContent() {
           </a>
         </div>
       </nav>
+
+      {/* Spacer for fixed navbar */}
+      <div className="h-16" aria-hidden="true" />
 
       {/* Hero Section */}
       <header className="relative max-w-6xl w-full mx-auto px-5 sm:px-6 pt-14 pb-10 z-10">
@@ -566,7 +569,7 @@ function PortfolioContent() {
       {/* Fullscreen Video Lightbox */}
       {activeVideo?.video && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
           onClick={() => setActiveVideo(null)}
         >
           <div
