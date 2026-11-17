@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type ReactNode,
@@ -95,6 +96,76 @@ export function ParallaxBackground() {
           transform: `translate3d(${(-mx * 0.6).toFixed(1)}px, ${(-scrollY * 0.08).toFixed(1)}px, 0)`,
         }}
       />
+    </div>
+  );
+}
+
+/**
+ * ScrollReveal: Hides sections and cards until scrolled into view,
+ * then smoothly animates into place with fade, translate, scale, and de-blur.
+ */
+interface ScrollRevealProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number; // ms
+  distance?: number; // px to translate (default 36)
+  duration?: number; // ms (default 750)
+  threshold?: number; // intersection threshold (default 0.1)
+  scale?: number; // initial scale (default 0.97)
+  blur?: boolean; // whether to blur initially (default true)
+}
+
+export function ScrollReveal({
+  children,
+  className = '',
+  delay = 0,
+  distance = 36,
+  duration = 750,
+  threshold = 0.1,
+  scale = 0.97,
+  blur = true,
+}: ScrollRevealProps) {
+  const [isVisible, setIsVisible] = useState(
+    () => typeof window !== 'undefined' && typeof IntersectionObserver === 'undefined',
+  );
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      {
+        threshold,
+        rootMargin: '0px 0px -40px 0px',
+      },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        filter: isVisible ? 'blur(0px)' : blur ? 'blur(6px)' : 'none',
+        transform: isVisible
+          ? 'translate3d(0, 0, 0) scale(1)'
+          : `translate3d(0, ${distance}px, 0) scale(${scale})`,
+        transition: `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        willChange: 'opacity, transform, filter',
+      }}
+    >
+      {children}
     </div>
   );
 }

@@ -14,6 +14,52 @@
   }
 }
 
+/* Ambient floating animation for project tiles */
+@keyframes tile-float-1 {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes tile-float-2 {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes tile-float-3 {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-tile-float-1 {
+  animation: tile-float-1 6.5s ease-in-out infinite;
+}
+
+.animate-tile-float-2 {
+  animation: tile-float-2 7.8s ease-in-out infinite 1s;
+}
+
+.animate-tile-float-3 {
+  animation: tile-float-3 5.8s ease-in-out infinite 2s;
+}
+
+.animate-tile-float-1:hover,
+.animate-tile-float-2:hover,
+.animate-tile-float-3:hover {
+  animation-play-state: paused;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

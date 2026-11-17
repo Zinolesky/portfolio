@@ -30,6 +30,7 @@ import {
   ScrollProgressBar,
   ParallaxTiltCard,
   FloatingBadge,
+  ScrollReveal,
 } from './Parallax';
 
 const FILTERS: Array<'All' | ProjectCategory> = ['All', 'Mobile', 'Backend & APIs', 'Web & Desktop'];
@@ -178,269 +179,301 @@ function PortfolioContent() {
 
       <main className="max-w-6xl w-full mx-auto px-5 sm:px-6 pb-20 space-y-20 z-10">
         {/* Option A: Interactive Smartphone Simulator & Android Launcher */}
-        <DeviceSimulator
-          apps={mobileApps}
-          selectedAppId={selectedAppId}
-          onSelectApp={setSelectedAppId}
-          onExpandVideo={setActiveVideo}
-        />
+        <ScrollReveal distance={40} duration={850}>
+          <DeviceSimulator
+            apps={mobileApps}
+            selectedAppId={selectedAppId}
+            onSelectApp={setSelectedAppId}
+            onExpandVideo={setActiveVideo}
+          />
+        </ScrollReveal>
 
         {/* All Projects Grid with Category Filter Chips */}
         <section id="projects" className="scroll-mt-24">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Projects</h2>
-              <p className="text-sm text-slate-400 mt-1">
-                Mobile apps, backend microservices, AI tools, and web deployments.
-              </p>
-            </div>
+          <ScrollReveal distance={30} duration={650}>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Projects</h2>
+                <p className="text-sm text-slate-400 mt-1">
+                  Mobile apps, backend microservices, AI tools, and web deployments.
+                </p>
+              </div>
 
-            {/* Filter Chips */}
-            <div className="flex flex-wrap gap-1.5">
-              {FILTERS.map((f) => {
-                const active = activeFilter === f;
-                return (
-                  <button
-                    key={f}
-                    type="button"
-                    onClick={() => setActiveFilter(f)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                      active
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                        : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800'
-                    }`}
-                  >
-                    {f}{' '}
-                    <span className={active ? 'text-indigo-200' : 'text-slate-500'}>
-                      ({countFor(f)})
-                    </span>
-                  </button>
-                );
-              })}
+              {/* Filter Chips */}
+              <div className="flex flex-wrap gap-1.5">
+                {FILTERS.map((f) => {
+                  const active = activeFilter === f;
+                  return (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => setActiveFilter(f)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                        active
+                          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                          : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      {f}{' '}
+                      <span className={active ? 'text-indigo-200' : 'text-slate-500'}>
+                        ({countFor(f)})
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {filteredProjects.map((p) => (
-              <ParallaxTiltCard key={p.id} className="h-full" maxTilt={3.5}>
-                <article className="group h-full rounded-2xl border border-slate-800/90 hover:border-indigo-500/50 bg-slate-900/60 backdrop-blur-sm p-6 flex flex-col transition-all duration-200 hover:shadow-xl hover:shadow-indigo-950/30">
-                  {p.video && (
-                    <div className="relative mb-5 h-72 w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center">
-                      <video
-                        src={p.video}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        onClick={() => setActiveVideo(p)}
-                        className="h-full w-full object-contain cursor-pointer"
-                      />
-                      <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5">
-                        {p.categories.includes('Mobile') && (
-                          <button
-                            type="button"
-                            onClick={() => handleLoadInPhone(p.id)}
-                            className="inline-flex items-center gap-1 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 px-2.5 py-1 text-xs font-medium text-white shadow cursor-pointer"
-                          >
-                            <Smartphone className="w-3 h-3" /> In Phone
-                          </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => setActiveVideo(p)}
-                          className="inline-flex items-center gap-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 px-2.5 py-1 text-xs text-slate-200 border border-slate-700/80 cursor-pointer"
-                        >
-                          <Maximize2 className="w-3 h-3" /> Expand
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-white group-hover:text-indigo-200 transition-colors">
-                      {p.title}
-                    </h3>
-                    {p.date && (
-                      <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
-                        {p.date}
-                      </span>
-                    )}
-                  </div>
-
-                  {p.flow && (
-                    <div className="flex flex-wrap items-center gap-1 mt-3">
-                      {p.flow.map((step, idx) => (
-                        <span key={step} className="inline-flex items-center gap-1">
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-950/80 border border-slate-800 text-indigo-300">
-                            {step}
-                          </span>
-                          {idx < p.flow!.length - 1 && (
-                            <ArrowRight className="w-2.5 h-2.5 text-slate-600" />
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <ul className="mt-3.5 space-y-1.5 text-sm text-slate-300 list-disc pl-4 leading-relaxed">
-                    {p.points.map((pt) => (
-                      <li key={pt}>{pt}</li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-wrap gap-1.5 mt-4">
-                    {p.stack.map((s) => (
-                      <span
-                        key={s}
-                        className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800/90 border border-slate-700/50 text-slate-300"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-
-                  {(p.repo || p.live || p.video) && (
-                    <div className="flex flex-wrap items-center gap-5 mt-auto pt-5 border-t border-slate-800/60">
+            {filteredProjects.map((p, idx) => (
+              <ScrollReveal
+                key={p.id}
+                delay={(idx % 4) * 80}
+                distance={45}
+                duration={750}
+                className="h-full"
+              >
+                <div
+                  className={`h-full ${
+                    ['animate-tile-float-1', 'animate-tile-float-2', 'animate-tile-float-3'][idx % 3]
+                  }`}
+                >
+                  <ParallaxTiltCard className="h-full" maxTilt={3.5}>
+                    <article className="group h-full rounded-2xl border border-slate-800/90 hover:border-indigo-500/50 bg-slate-900/60 backdrop-blur-sm p-6 flex flex-col transition-all duration-200 hover:shadow-xl hover:shadow-indigo-950/30">
                       {p.video && (
-                        <button
-                          type="button"
-                          onClick={() => setActiveVideo(p)}
-                          className={`${actionLink} cursor-pointer`}
-                        >
-                          Demo <Play className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="relative mb-5 h-72 w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center">
+                          <video
+                            src={p.video}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            onClick={() => setActiveVideo(p)}
+                            className="h-full w-full object-contain cursor-pointer"
+                          />
+                          <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5">
+                            {p.categories.includes('Mobile') && (
+                              <button
+                                type="button"
+                                onClick={() => handleLoadInPhone(p.id)}
+                                className="inline-flex items-center gap-1 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 px-2.5 py-1 text-xs font-medium text-white shadow cursor-pointer"
+                              >
+                                <Smartphone className="w-3 h-3" /> In Phone
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => setActiveVideo(p)}
+                              className="inline-flex items-center gap-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 px-2.5 py-1 text-xs text-slate-200 border border-slate-700/80 cursor-pointer"
+                            >
+                              <Maximize2 className="w-3 h-3" /> Expand
+                            </button>
+                          </div>
+                        </div>
                       )}
-                      {p.live && (
-                        <a className={actionLink} href={p.live} target="_blank" rel="noreferrer">
-                          Live <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+
+                      <div className="flex items-baseline justify-between gap-3">
+                        <h3 className="text-lg font-semibold text-white group-hover:text-indigo-200 transition-colors">
+                          {p.title}
+                        </h3>
+                        {p.date && (
+                          <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
+                            {p.date}
+                          </span>
+                        )}
+                      </div>
+
+                      {p.flow && (
+                        <div className="flex flex-wrap items-center gap-1 mt-3">
+                          {p.flow.map((step, stepIdx) => (
+                            <span key={step} className="inline-flex items-center gap-1">
+                              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-950/80 border border-slate-800 text-indigo-300">
+                                {step}
+                              </span>
+                              {stepIdx < p.flow!.length - 1 && (
+                                <ArrowRight className="w-2.5 h-2.5 text-slate-600" />
+                              )}
+                            </span>
+                          ))}
+                        </div>
                       )}
-                      {p.repo && (
-                        <a className={actionLink} href={p.repo} target="_blank" rel="noreferrer">
-                          Code <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+
+                      <ul className="mt-3.5 space-y-1.5 text-sm text-slate-300 list-disc pl-4 leading-relaxed">
+                        {p.points.map((pt) => (
+                          <li key={pt}>{pt}</li>
+                        ))}
+                      </ul>
+
+                      <div className="flex flex-wrap gap-1.5 mt-4">
+                        {p.stack.map((s) => (
+                          <span
+                            key={s}
+                            className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800/90 border border-slate-700/50 text-slate-300"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+
+                      {(p.repo || p.live || p.video) && (
+                        <div className="flex flex-wrap items-center gap-5 mt-auto pt-5 border-t border-slate-800/60">
+                          {p.video && (
+                            <button
+                              type="button"
+                              onClick={() => setActiveVideo(p)}
+                              className={`${actionLink} cursor-pointer`}
+                            >
+                              Demo <Play className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                          {p.live && (
+                            <a className={actionLink} href={p.live} target="_blank" rel="noreferrer">
+                              Live <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {p.repo && (
+                            <a className={actionLink} href={p.repo} target="_blank" rel="noreferrer">
+                              Code <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
-                </article>
-              </ParallaxTiltCard>
+                    </article>
+                  </ParallaxTiltCard>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* Technical Skills */}
         <section id="skills" className="scroll-mt-24">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-6">
-            Technical Skills
-          </h2>
+          <ScrollReveal distance={30} duration={600}>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-6">
+              Technical Skills
+            </h2>
+          </ScrollReveal>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Object.entries(skills).map(([group, items]) => (
-              <ParallaxTiltCard key={group} maxTilt={3} className="h-full">
-                <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-5 h-full">
-                  <h3 className="text-xs font-mono uppercase tracking-wider text-indigo-300 mb-3">
-                    {group}
-                  </h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {items.map((item) => (
-                      <span
-                        key={item}
-                        className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-200"
-                      >
-                        {item}
-                      </span>
-                    ))}
+            {Object.entries(skills).map(([group, items], idx) => (
+              <ScrollReveal
+                key={group}
+                delay={(idx % 3) * 75}
+                distance={35}
+                duration={650}
+                className="h-full"
+              >
+                <ParallaxTiltCard maxTilt={3} className="h-full">
+                  <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-5 h-full">
+                    <h3 className="text-xs font-mono uppercase tracking-wider text-indigo-300 mb-3">
+                      {group}
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {items.map((item) => (
+                        <span
+                          key={item}
+                          className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-200"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </ParallaxTiltCard>
+                </ParallaxTiltCard>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* Experience & Education */}
         <section id="background" className="scroll-mt-24 grid gap-6 md:grid-cols-2">
-          <ParallaxTiltCard maxTilt={2.5} className="h-full">
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-6 h-full flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-4">
-                  <Briefcase className="w-4 h-4" />
-                  <span>Experience</span>
-                </div>
-                {experience.map((exp) => (
-                  <div key={exp.company}>
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-base font-semibold text-white">{exp.role}</h3>
-                      <span className="text-xs font-mono text-slate-500">{exp.period}</span>
-                    </div>
-                    <p className="text-sm text-indigo-300 mt-0.5">
-                      {exp.company} · {exp.location}
-                    </p>
-                    <ul className="mt-3 space-y-1.5 text-sm text-slate-300 list-disc pl-4 leading-relaxed">
-                      {exp.points.map((pt) => (
-                        <li key={pt}>{pt}</li>
-                      ))}
-                    </ul>
+          <ScrollReveal delay={0} distance={40} duration={750} className="h-full">
+            <ParallaxTiltCard maxTilt={2.5} className="h-full">
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-6 h-full flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-4">
+                    <Briefcase className="w-4 h-4" />
+                    <span>Experience</span>
                   </div>
-                ))}
+                  {experience.map((exp) => (
+                    <div key={exp.company}>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <h3 className="text-base font-semibold text-white">{exp.role}</h3>
+                        <span className="text-xs font-mono text-slate-500">{exp.period}</span>
+                      </div>
+                      <p className="text-sm text-indigo-300 mt-0.5">
+                        {exp.company} · {exp.location}
+                      </p>
+                      <ul className="mt-3 space-y-1.5 text-sm text-slate-300 list-disc pl-4 leading-relaxed">
+                        {exp.points.map((pt) => (
+                          <li key={pt}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </ParallaxTiltCard>
+            </ParallaxTiltCard>
+          </ScrollReveal>
 
-          <ParallaxTiltCard maxTilt={2.5} className="h-full">
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-6 flex flex-col justify-between gap-6 h-full">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-4">
-                  <GraduationCap className="w-4 h-4" />
-                  <span>Education</span>
+          <ScrollReveal delay={120} distance={40} duration={750} className="h-full">
+            <ParallaxTiltCard maxTilt={2.5} className="h-full">
+              <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm p-6 flex flex-col justify-between gap-6 h-full">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-4">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>Education</span>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="text-base font-semibold text-white">{education.degree}</h3>
+                    <span className="text-xs font-mono text-slate-500">{education.graduated}</span>
+                  </div>
+                  <p className="text-sm text-indigo-300 mt-0.5">
+                    {education.school} · {education.location}
+                  </p>
+                  <div className="mt-4">
+                    <div className="text-xs font-mono text-slate-500 mb-2">Relevant Coursework</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {education.coursework.map((c) => (
+                        <span
+                          key={c}
+                          className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-baseline justify-between gap-2">
-                  <h3 className="text-base font-semibold text-white">{education.degree}</h3>
-                  <span className="text-xs font-mono text-slate-500">{education.graduated}</span>
-                </div>
-                <p className="text-sm text-indigo-300 mt-0.5">
-                  {education.school} · {education.location}
-                </p>
-                <div className="mt-4">
-                  <div className="text-xs font-mono text-slate-500 mb-2">Relevant Coursework</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {education.coursework.map((c) => (
+
+                <div className="pt-5 border-t border-slate-800/80">
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-3">
+                    <Award className="w-4 h-4" />
+                    <span>Certification</span>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="text-sm font-semibold text-white">
+                      {certification.issuer} — {certification.title}
+                    </h3>
+                    <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
+                      {certification.credential}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-2.5">
+                    {certification.topics.map((t) => (
                       <span
-                        key={c}
+                        key={t}
                         className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300"
                       >
-                        {c}
+                        {t}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
-
-              <div className="pt-5 border-t border-slate-800/80">
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-300 mb-3">
-                  <Award className="w-4 h-4" />
-                  <span>Certification</span>
-                </div>
-                <div className="flex items-baseline justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-white">
-                    {certification.issuer} — {certification.title}
-                  </h3>
-                  <span className="text-xs font-mono text-slate-500 whitespace-nowrap">
-                    {certification.credential}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5 mt-2.5">
-                  {certification.topics.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </ParallaxTiltCard>
+            </ParallaxTiltCard>
+          </ScrollReveal>
         </section>
       </main>
 
