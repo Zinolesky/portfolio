@@ -10,27 +10,6 @@ import { useParallax } from './hooks/ParallaxContext';
 export { ParallaxProvider } from './hooks/ParallaxProvider';
 
 /**
- * Top reading progress bar that smoothly fills across the viewport with a glowing lead dot.
- */
-export function ScrollProgressBar() {
-  const { scrollProgress } = useParallax();
-  return (
-    <div
-      className="fixed top-0 left-0 right-0 z-50 h-[2.5px] pointer-events-none bg-transparent"
-      aria-hidden="true"
-    >
-      <div
-        className="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 transition-all duration-75 ease-out relative"
-        style={{ width: `${(scrollProgress * 100).toFixed(2)}%` }}
-      >
-        {/* Glowing tip */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-300 rounded-full blur-[2px] shadow-[0_0_12px_rgba(34,211,238,1)]" />
-      </div>
-    </div>
-  );
-}
-
-/**
  * Multi-layer ambient background with glowing nebula orbs and drifting grid
  * that move at differential parallax speeds on scroll and mouse interaction.
  */

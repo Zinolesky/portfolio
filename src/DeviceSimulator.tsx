@@ -81,7 +81,7 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
   return (
     <section
       id="simulator"
-      className="rounded-3xl border border-slate-800/90 bg-slate-900/45 backdrop-blur-md p-5 sm:p-8 shadow-2xl shadow-indigo-950/20"
+      className="scroll-mt-24 rounded-3xl border border-slate-800/90 bg-slate-900/45 backdrop-blur-md p-5 sm:p-8 shadow-2xl shadow-indigo-950/20"
     >
       {/* Top App Switcher Dock */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-6 mb-6 border-b border-slate-800/80">

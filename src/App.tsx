@@ -27,7 +27,6 @@ import { DeviceSimulator } from './DeviceSimulator';
 import {
   ParallaxProvider,
   ParallaxBackground,
-  ScrollProgressBar,
   ParallaxTiltCard,
   FloatingBadge,
   ScrollReveal,
@@ -35,6 +34,15 @@ import {
 
 const FILTERS: Array<'All' | ProjectCategory> = ['All', 'Mobile', 'Backend & APIs', 'Web & Desktop'];
 const CURRENT_YEAR = new Date().getFullYear();
+
+const NAV_ITEMS = [
+  { id: 'simulator', label: 'Device Stage' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'background', label: 'Background' },
+] as const;
+
+type NavSectionId = (typeof NAV_ITEMS)[number]['id'];
 
 const actionLink =
   'inline-flex items-center gap-1.5 text-xs font-medium text-indigo-300 hover:text-white transition-colors';
@@ -44,6 +52,54 @@ function PortfolioContent() {
   const [selectedAppId, setSelectedAppId] = useState<string | null>(mobileApps[0]?.id ?? null);
   const [activeFilter, setActiveFilter] = useState<'All' | ProjectCategory>('All');
   const [activeVideo, setActiveVideo] = useState<Project | null>(null);
+  const [activeSection, setActiveSection] = useState<NavSectionId | null>(null);
+
+  useEffect(() => {
+    const sectionIds: NavSectionId[] = ['simulator', 'projects', 'skills', 'background'];
+
+    const handleScroll = () => {
+      // 1. If scrolled near the bottom of the page, activate the last section ('background')
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      if (scrollBottom >= documentHeight - 80) {
+        setActiveSection('background');
+        return;
+      }
+
+      // 2. If above the first section (Hero header), no section is active
+      const firstSection = document.getElementById('simulator');
+      if (firstSection) {
+        const firstRect = firstSection.getBoundingClientRect();
+        if (firstRect.top > 280) {
+          setActiveSection(null);
+          return;
+        }
+      }
+
+      // 3. Find which section occupies the viewport focal line (~160px from top)
+      const focalY = 160;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= focalY) {
+            setActiveSection(id);
+            return;
+          }
+        }
+      }
+    };
+
+    const rafId = requestAnimationFrame(handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -68,16 +124,17 @@ function PortfolioContent() {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Scroll Reading Progress Bar */}
-      <ScrollProgressBar />
-
       {/* Multi-layer Ambient Parallax Background */}
       <ParallaxBackground />
 
       {/* Sticky Top Navbar */}
       <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#060913]/85 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <a href="#" className="flex items-center gap-2.5">
+          <a
+            href="#"
+            onClick={() => setActiveSection(null)}
+            className="flex items-center gap-2.5"
+          >
             <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-xs font-extrabold text-white shadow-md shadow-indigo-500/20">
               ET
             </span>
@@ -86,19 +143,28 @@ function PortfolioContent() {
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-400">
-            <a href="#simulator" className="hover:text-white transition-colors">
-              Device Stage
-            </a>
-            <a href="#projects" className="hover:text-white transition-colors">
-              Projects
-            </a>
-            <a href="#skills" className="hover:text-white transition-colors">
-              Skills
-            </a>
-            <a href="#background" className="hover:text-white transition-colors">
-              Background
-            </a>
+          {/* Section Navigation Tabs with Dynamic Active Highlight */}
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs font-medium backdrop-blur-md">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1.5 ${
+                    isActive
+                      ? 'text-white font-semibold bg-indigo-600 shadow-md shadow-indigo-600/35 border border-indigo-400/30'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.9)] animate-pulse" />
+                  )}
+                  {item.label}
+                </a>
+              );
+            })}
           </div>
 
           <a
