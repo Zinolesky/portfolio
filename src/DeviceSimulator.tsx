@@ -21,6 +21,7 @@ import {
   Wifi,
 } from 'lucide-react';
 import { profile, type Project } from './data';
+import { useParallax } from './hooks/ParallaxContext';
 
 interface DeviceSimulatorProps {
   apps: Project[];
@@ -45,6 +46,7 @@ function AppIconGlyph({ iconKey, className = 'w-6 h-6' }: { iconKey?: Project['i
 }
 
 export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVideo }: DeviceSimulatorProps) {
+  const { mouseX, mouseY, isTouch } = useParallax();
   const [lagosTime, setLagosTime] = useState<{ time: string; date: string }>({ time: '12:00', date: 'Sun, Nov 1' });
 
   useEffect(() => {
@@ -137,11 +139,16 @@ export function DeviceSimulator({ apps, selectedAppId, onSelectApp, onExpandVide
           } flex flex-col items-center justify-center transition-all duration-300`}
         >
           <div
-            className={`relative bg-slate-950 p-2.5 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.35)] border-[3px] border-slate-700/90 ring-1 ring-white/10 transition-all duration-300 ${
+            className={`relative bg-slate-950 p-2.5 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.35)] border-[3px] border-slate-700/90 ring-1 ring-white/10 transition-transform duration-200 ease-out [transform-style:preserve-3d] ${
               isLandscape
                 ? 'w-full max-w-[540px] rounded-[34px]'
                 : 'w-[282px] sm:w-[292px] h-[615px] rounded-[44px]'
             }`}
+            style={{
+              transform: !isTouch
+                ? `perspective(1200px) rotateY(${(mouseX * 4).toFixed(2)}deg) rotateX(${(-mouseY * 4).toFixed(2)}deg)`
+                : 'perspective(1200px) rotateY(0deg) rotateX(0deg)',
+            }}
           >
             {/* Hardware Side Buttons (Portrait) */}
             {!isLandscape && (

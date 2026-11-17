@@ -1,0 +1,221 @@
+import {
+  useRef,
+  useState,
+  type ReactNode,
+  type MouseEvent as ReactMouseEvent,
+} from 'react';
+import { useParallax } from './hooks/ParallaxContext';
+
+export { ParallaxProvider } from './hooks/ParallaxProvider';
+
+/**
+ * Top reading progress bar that smoothly fills across the viewport with a glowing lead dot.
+ */
+export function ScrollProgressBar() {
+  const { scrollProgress } = useParallax();
+  return (
+    <div
+      className="fixed top-0 left-0 right-0 z-50 h-[2.5px] pointer-events-none bg-transparent"
+      aria-hidden="true"
+    >
+      <div
+        className="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 transition-all duration-75 ease-out relative"
+        style={{ width: `${(scrollProgress * 100).toFixed(2)}%` }}
+      >
+        {/* Glowing tip */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-300 rounded-full blur-[2px] shadow-[0_0_12px_rgba(34,211,238,1)]" />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Multi-layer ambient background with glowing nebula orbs and drifting grid
+ * that move at differential parallax speeds on scroll and mouse interaction.
+ */
+export function ParallaxBackground() {
+  const { scrollY, mouseX, mouseY, isTouch } = useParallax();
+
+  // Subtle mouse dampening for desktop
+  const mx = isTouch ? 0 : mouseX * 24;
+  const my = isTouch ? 0 : mouseY * 24;
+
+  return (
+    <div
+      className="fixed inset-0 pointer-events-none overflow-hidden z-0"
+      aria-hidden="true"
+    >
+      {/* Layer 1: Subtle Drifting Dot Grid */}
+      <div
+        className="absolute inset-0 opacity-[0.045] transition-transform duration-100 ease-out"
+        style={{
+          backgroundImage:
+            'radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          transform: `translate3d(0, ${(-scrollY * 0.08).toFixed(1)}px, 0)`,
+        }}
+      />
+
+      {/* Layer 2: Deep Indigo / Violet Nebula (Top Left - drifts downward with scroll) */}
+      <div
+        className="absolute -top-36 -left-36 w-[640px] h-[640px] rounded-full blur-[130px] opacity-25 mix-blend-screen transition-transform duration-200 ease-out"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(99, 102, 241, 0.85) 0%, rgba(139, 92, 246, 0.4) 50%, transparent 70%)',
+          transform: `translate3d(${(-mx * 0.7).toFixed(1)}px, ${(scrollY * 0.18 - my * 0.7).toFixed(1)}px, 0)`,
+        }}
+      />
+
+      {/* Layer 3: Cyan / Teal Accent Glow (Top Right - drifts counter-scroll) */}
+      <div
+        className="absolute top-20 -right-40 w-[580px] h-[580px] rounded-full blur-[140px] opacity-20 mix-blend-screen transition-transform duration-200 ease-out"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(34, 211, 238, 0.8) 0%, rgba(16, 185, 129, 0.35) 50%, transparent 70%)',
+          transform: `translate3d(${(mx * 0.9).toFixed(1)}px, ${(-scrollY * 0.12 + my * 0.9).toFixed(1)}px, 0)`,
+        }}
+      />
+
+      {/* Layer 4: Stage Atmosphere Orb (Middle / Device Simulator section) */}
+      <div
+        className="absolute top-[48%] left-[20%] w-[680px] h-[580px] rounded-full blur-[150px] opacity-15 mix-blend-screen transition-transform duration-300 ease-out"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(79, 70, 229, 0.7) 0%, rgba(56, 189, 248, 0.25) 50%, transparent 70%)',
+          transform: `translate3d(${(mx * 0.5).toFixed(1)}px, ${(scrollY * 0.1 + my * 0.5).toFixed(1)}px, 0)`,
+        }}
+      />
+
+      {/* Layer 5: Lower Grid Floor Glow (Behind Projects / Background sections) */}
+      <div
+        className="absolute -bottom-48 right-[10%] w-[720px] h-[620px] rounded-full blur-[160px] opacity-20 mix-blend-screen transition-transform duration-300 ease-out"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(168, 85, 247, 0.65) 0%, rgba(59, 130, 246, 0.3) 50%, transparent 70%)',
+          transform: `translate3d(${(-mx * 0.6).toFixed(1)}px, ${(-scrollY * 0.08).toFixed(1)}px, 0)`,
+        }}
+      />
+    </div>
+  );
+}
+
+/**
+ * Interactive 3D Perspective Tilt Card with cursor-tracking specular highlight.
+ */
+interface ParallaxTiltCardProps {
+  children: ReactNode;
+  className?: string;
+  maxTilt?: number; // max tilt degrees (default 4)
+}
+
+export function ParallaxTiltCard({
+  children,
+  className = '',
+  maxTilt = 4,
+}: ParallaxTiltCardProps) {
+  const { isTouch } = useParallax();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [style, setStyle] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    glareX: 50,
+    glareY: 50,
+    glareOpacity: 0,
+  });
+
+  const handleMouseMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    if (isTouch || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const px = x / rect.width - 0.5;
+    const py = y / rect.height - 0.5;
+
+    const rotateY = px * maxTilt * 2;
+    const rotateX = -py * maxTilt * 2;
+
+    setStyle({
+      rotateX,
+      rotateY,
+      glareX: (x / rect.width) * 100,
+      glareY: (y / rect.height) * 100,
+      glareOpacity: 0.14,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setStyle({
+      rotateX: 0,
+      rotateY: 0,
+      glareX: 50,
+      glareY: 50,
+      glareOpacity: 0,
+    });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative transition-transform duration-200 ease-out [transform-style:preserve-3d] ${className}`}
+      style={{
+        transform:
+          !isTouch && (style.rotateX !== 0 || style.rotateY !== 0)
+            ? `perspective(1000px) rotateX(${style.rotateX.toFixed(2)}deg) rotateY(${style.rotateY.toFixed(2)}deg) scale3d(1.008, 1.008, 1.008)`
+            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+      }}
+    >
+      {children}
+
+      {/* Dynamic Specular Light Glare Overlay */}
+      {!isTouch && (
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 z-10"
+          style={{
+            opacity: style.glareOpacity,
+            background: `radial-gradient(circle 300px at ${style.glareX}% ${style.glareY}%, rgba(255, 255, 255, 0.22), transparent 75%)`,
+          }}
+          aria-hidden="true"
+        />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Floating tech badge that gently drifts at different parallax scroll rates
+ * and follows subtle mouse movement.
+ */
+interface FloatingBadgeProps {
+  label: string;
+  icon?: ReactNode;
+  scrollFactor?: number;
+  mouseFactor?: number;
+  className?: string;
+}
+
+export function FloatingBadge({
+  label,
+  icon,
+  scrollFactor = 0.15,
+  mouseFactor = 12,
+  className = '',
+}: FloatingBadgeProps) {
+  const { scrollY, mouseX, mouseY, isTouch } = useParallax();
+  const mx = isTouch ? 0 : mouseX * mouseFactor;
+  const my = isTouch ? 0 : mouseY * mouseFactor;
+
+  return (
+    <div
+      className={`hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/85 border border-slate-700/60 backdrop-blur-md text-xs font-mono text-slate-300 shadow-xl shadow-indigo-950/40 transition-transform duration-150 ease-out select-none ${className}`}
+      style={{
+        transform: `translate3d(${mx.toFixed(1)}px, ${(scrollY * scrollFactor + my).toFixed(1)}px, 0)`,
+      }}
+    >
+      {icon && <span className="text-indigo-400">{icon}</span>}
+      <span>{label}</span>
+    </div>
+  );
+}
