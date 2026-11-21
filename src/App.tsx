@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import {
   ArrowRight,
   Award,
@@ -31,6 +32,7 @@ import {
   FloatingBadge,
   ScrollReveal,
 } from './Parallax';
+import { trackEvent, trackSessionVisit } from './analytics';
 
 const FILTERS: Array<'All' | ProjectCategory> = ['All', 'Mobile', 'Backend & APIs', 'Web & Desktop'];
 const CURRENT_YEAR = new Date().getFullYear();
@@ -53,6 +55,10 @@ function PortfolioContent() {
   const [activeFilter, setActiveFilter] = useState<'All' | ProjectCategory>('All');
   const [activeVideo, setActiveVideo] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState<NavSectionId | null>(null);
+
+  useEffect(() => {
+    trackSessionVisit();
+  }, []);
 
   useEffect(() => {
     const sectionIds: NavSectionId[] = ['simulator', 'projects', 'skills', 'background'];
@@ -174,6 +180,7 @@ function PortfolioContent() {
           <a
             href={profile.resumeUrl}
             download="Efezino_Taigbenu_Resume.pdf"
+            onClick={() => trackEvent('resume_download', { source: 'navbar' })}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/25 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
@@ -220,6 +227,7 @@ function PortfolioContent() {
             <a
               href={profile.resumeUrl}
               download="Efezino_Taigbenu_Resume.pdf"
+              onClick={() => trackEvent('resume_download', { source: 'hero' })}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-slate-950 hover:bg-slate-200 text-xs sm:text-sm font-semibold transition-colors shadow-lg shadow-white/5"
             >
               <Download className="w-4 h-4" /> Download Resume
@@ -228,6 +236,7 @@ function PortfolioContent() {
               href={profile.github}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackEvent('outbound_click', { target: 'github', source: 'hero' })}
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs sm:text-sm font-medium transition-colors"
             >
               GitHub <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
@@ -236,12 +245,14 @@ function PortfolioContent() {
               href={profile.linkedin}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackEvent('outbound_click', { target: 'linkedin', source: 'hero' })}
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs sm:text-sm font-medium transition-colors"
             >
               LinkedIn <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
             </a>
             <a
               href={`mailto:${profile.email}`}
+              onClick={() => trackEvent('outbound_click', { target: 'email', source: 'hero' })}
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs sm:text-sm font-medium transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-indigo-400" /> {profile.email}
@@ -280,7 +291,10 @@ function PortfolioContent() {
                     <button
                       key={f}
                       type="button"
-                      onClick={() => setActiveFilter(f)}
+                      onClick={() => {
+                        setActiveFilter(f);
+                        trackEvent('project_filter', { category: f });
+                      }}
                       className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                         active
                           ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
@@ -395,19 +409,34 @@ function PortfolioContent() {
                           {p.video && (
                             <button
                               type="button"
-                              onClick={() => setActiveVideo(p)}
+                              onClick={() => {
+                                setActiveVideo(p);
+                                trackEvent('project_demo_open', { project: p.id });
+                              }}
                               className={`${actionLink} cursor-pointer`}
                             >
                               Demo <Play className="w-3.5 h-3.5" />
                             </button>
                           )}
                           {p.live && (
-                            <a className={actionLink} href={p.live} target="_blank" rel="noreferrer">
+                            <a
+                              className={actionLink}
+                              href={p.live}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => trackEvent('project_live_click', { project: p.id })}
+                            >
                               Live <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
                           {p.repo && (
-                            <a className={actionLink} href={p.repo} target="_blank" rel="noreferrer">
+                            <a
+                              className={actionLink}
+                              href={p.repo}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => trackEvent('project_code_click', { project: p.id })}
+                            >
                               Code <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
@@ -610,6 +639,7 @@ export default function App() {
   return (
     <ParallaxProvider>
       <PortfolioContent />
+      <Analytics />
     </ParallaxProvider>
   );
 }
