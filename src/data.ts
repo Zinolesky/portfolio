@@ -197,6 +197,7 @@ export const projects: Project[] = [
       "Zero-drop auto-fit Unicode PDF stamper (DejaVuSans), NumPy signature processing, interactive PDF.js visual Q→A template mapper, reusable saved data profiles, and automated pytest + ruff CI.",
     ],
     repo: "https://github.com/Zinolesky/PDFGuru",
+    live: "https://pdfguru-liart.vercel.app",
   },
   {
     id: "road-to-python",

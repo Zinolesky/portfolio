@@ -26,6 +26,7 @@ Full-stack mobile spatial application delivering venue discovery and turn-by-tur
 ### PDFGuru — Universal PDF Scraper & Form Filler (PWA)
 Full-stack Progressive Web App (React, VitePWA, Tailwind CSS, PDF.js) and containerized FastAPI backend featuring a 4-stage universal Q→A detection pipeline (PyMuPDF vector-geometry scraping & OCR, native AcroForm widget extraction, Gemini Multimodal Vision via Interactions API with geometry snapping, and offline fallback) plus zero-drop Unicode PDF stamping (`DejaVuSans`) and NumPy signature processing.
 - **Repository:** [github.com/Zinolesky/PDFGuru](https://github.com/Zinolesky/PDFGuru)
+- **Live Site:** [pdfguru-liart.vercel.app](https://pdfguru-liart.vercel.app)
 
 ### ChatFlow — Video-First Social App
 A video-first social media application featuring a private DM reel playlist that transitions seamlessly into an algorithmic discovery feed using React Native, TypeScript, Go, and Supabase (PostgreSQL).
