@@ -23,8 +23,9 @@ A cross-platform anti-spam call screening application for Android (`CallScreenin
 Full-stack mobile spatial application delivering venue discovery and turn-by-turn routing across Bowen University campus using React Native, Django REST Framework, PostgreSQL + PostGIS (GiST spatial indexing under 150ms), and Google Maps APIs.
 - **Repository:** [github.com/Zinolesky/Bowen-Navigation](https://github.com/Zinolesky/Bowen-Navigation)
 
-### AI-Powered Universal PDF Auto-Filler (PWA)
-Cross-platform Progressive Web App that integrates the Google Gemini API, FastAPI, and PyMuPDF to extract unstructured client data and stamp structured document fields with zero coordinate drift.
+### PDFGuru — Universal PDF Scraper & Form Filler (PWA)
+Full-stack Progressive Web App (React, VitePWA, Tailwind CSS, PDF.js) and containerized FastAPI backend featuring a 4-stage universal Q→A detection pipeline (PyMuPDF vector-geometry scraping & OCR, native AcroForm widget extraction, Gemini Multimodal Vision via Interactions API with geometry snapping, and offline fallback) plus zero-drop Unicode PDF stamping (`DejaVuSans`) and NumPy signature processing.
+- **Repository:** [github.com/Zinolesky/PDFGuru](https://github.com/Zinolesky/PDFGuru)
 
 ### ChatFlow — Video-First Social App
 A video-first social media application featuring a private DM reel playlist that transitions seamlessly into an algorithmic discovery feed using React Native, TypeScript, Go, and Supabase (PostgreSQL).
